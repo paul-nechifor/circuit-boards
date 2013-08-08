@@ -1,5 +1,5 @@
 function Board(lenX, lenY, abandonPartitionSize, partitionParamFunc,
-        onNewConnection, onFinish) {
+        typePool, onNew, onFinish) {
     this.lenX = lenX;
     this.lenY = lenY;
     
@@ -10,8 +10,16 @@ function Board(lenX, lenY, abandonPartitionSize, partitionParamFunc,
     // the minimum number of tries and the maximum number of failures.
     this.partitionParamFunc = partitionParamFunc;
     
-    this.onNewConnection = onNewConnection;
+    // This will be used to determine what type of thing to draw on every try.
+    this.typePool = typePool;
+    
+    this.onNew = onNew;
     this.onFinish = onFinish;
+    
+    this.typePoolFuncs = {
+        connection: this.doOneTry_connection,
+        text: this.doOneTry_text,
+    };
     
     // This matrix tells if a point is occupied or not.
     this.occupied = new Uint8Array(lenX * lenY);
@@ -21,8 +29,8 @@ function Board(lenX, lenY, abandonPartitionSize, partitionParamFunc,
     // Each number represents a cell position (index of this.occupied).
     this.partitions = null;
     
-    // If this is true, the filling stops. The onNewConnection callback might
-    // request the stop.
+    // If this is true, the filling stops. Something run in the onNew callback
+    // might request the stop.
     this.stop = false;
 }
 
@@ -115,12 +123,19 @@ Board.prototype.doOnePartitionPass = function (partition, onFinish) {
     next();
 };
 
+Board.prototype.doOneTry = function (partition) {
+    var type = this.typePool.pick();
+    var func = this.typePoolFuncs[type];
+    
+    return func.call(this, partition);
+};
+
 /**
  * This tries to connect two random cells in the partition and returns the
  * number of cells that were eliminated. This function goes into an infinite
  * loop if the partition doesn't have free cells.
  */
-Board.prototype.doOneTry = function (partition) {
+Board.prototype.doOneTry_connection = function (partition) {
     var a, b;
     var pIndex;
     var lenX = this.lenX;
@@ -147,15 +162,22 @@ Board.prototype.doOneTry = function (partition) {
     
     this.eliminateUsedCells(a, directions);
     
-    this.onNewConnection(
-        a % lenX,
-        (a / lenX) | 0,
-        b % lenX,
-        (b / lenX) | 0,
-        directions
-    );
+    var thing = {
+        type: 'connection',
+        sx: a % lenX,
+        sy: (a / lenX) | 0,
+        tx: b % lenX,
+        ty: (b / lenX) | 0,
+        directions: directions
+    };
+    
+    this.onNew(thing);
     
     return 1 + directions.length;
+};
+
+Board.prototype.doOneTry_text = function (partition) {
+    return 0;
 };
 
 Board.prototype.eliminateUsedCells = function (startCell, directions) {

@@ -30,13 +30,18 @@
         }
 
         function getInputValues() {
-            var choicePool = new ChoicePool();
-            choicePool.addChoice(30, new SmallHole());
-            choicePool.addChoice(5, new Square());
+            var connectionTypePool = new ChoicePool();
+            connectionTypePool.addChoice(30, new SmallHole());
+            connectionTypePool.addChoice(5, new Square());
+            
+            var typePool = new ChoicePool();
+            typePool.addChoice(20, 'connection');
+            typePool.addChoice(2, 'text');
 
             return {
                 canvas: document.getElementById("tile"),
-                choicePool: choicePool,
+                connectionTypePool: connectionTypePool,
+                typePool: typePool,
                 size: 64,
                 abandonPartitionSize: 4,
                 partitionParamFunc: partitionParamFunc,

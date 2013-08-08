@@ -12,9 +12,6 @@ function DrawBoard(values) {
     this.finished = false;
     
     var that = this;
-    var onNewConnection = function (sx, sy, tx, ty, directions) {
-        that.addConnection(sx, sy, tx, ty, directions);
-    };
     var onFinish = function () {
         that.finished = true;
         that.redraw();
@@ -25,7 +22,8 @@ function DrawBoard(values) {
         values.size,
         values.abandonPartitionSize,
         values.partitionParamFunc,
-        onNewConnection,
+        values.typePool,
+        this.addNewThing.bind(this),
         onFinish);
 }
 
@@ -59,16 +57,27 @@ DrawBoard.prototype.redraw = function () {
     }
 };
 
-DrawBoard.prototype.addConnection = function (sx, sy, tx, ty, directions) {
-    var type = this.values.choicePool.pick();
-    
-    this.elements.push(new Element(type, sx, sy));
-    this.elements.push(new Element(type, tx, ty));
-    
-    this.lines.push(new Line(sx, sy, directions));
+DrawBoard.prototype.addNewThing = function (t) {
+    if (t.type === 'connection') {
+        this.addConnection(t.sx, t.sy, t.tx, t.ty, t.directions);
+    } else if (t.type === 'text') {
+        this.addText();
+    }
     
     if (Date.now() - this.lastDrawn > 100) {
         this.redraw();
         this.lastDrawn = Date.now();
     }
+};
+
+DrawBoard.prototype.addConnection = function (sx, sy, tx, ty, directions) {
+    var type = this.values.connectionTypePool.pick();
+    
+    this.elements.push(new Element(type, sx, sy));
+    this.elements.push(new Element(type, tx, ty));
+    
+    this.lines.push(new Line(sx, sy, directions));
+};
+
+DrawBoard.prototype.addText = function () {
 };
