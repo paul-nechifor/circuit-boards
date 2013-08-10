@@ -13,7 +13,6 @@ Text.prototype.draw = function (ctx, values) {
     
     // To align the text in the center of the cells used;
     var xAdvance = (cs * this.nCells - ctx.measureText(this.text).width) / 2;
-    console.log(xAdvance);
     
     for (var bx = -1; bx <= 1; bx++) {
     	for (var by = -1; by <= 1; by++) {
