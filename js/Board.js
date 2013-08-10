@@ -1,5 +1,5 @@
 function Board(lenX, lenY, abandonPartitionSize, partitionParamFunc,
-        typePool, onNew, onFinish) {
+        typePool, cellsForText, onNew, onFinish) {
     this.lenX = lenX;
     this.lenY = lenY;
     
@@ -12,6 +12,8 @@ function Board(lenX, lenY, abandonPartitionSize, partitionParamFunc,
     
     // This will be used to determine what type of thing to draw on every try.
     this.typePool = typePool;
+    
+    this.cellsForText = cellsForText;
     
     this.onNew = onNew;
     this.onFinish = onFinish;
@@ -42,7 +44,9 @@ Board.prototype.doUntilFull = function () {
             return;
         }
         
-        that.doPartitionsPass(next);
+        that.doPartitionsPass(function () {
+            setTimeout(next, 0);
+        });
     };
     
     next();
@@ -177,7 +181,61 @@ Board.prototype.doOneTry_connection = function (partition) {
 };
 
 Board.prototype.doOneTry_text = function (partition) {
-    return 0;
+    var text = this.getRandomText();
+    var nCells = this.cellsForText(text);
+    var lenX = this.lenX;
+    
+    var i, pIndex, a, cell, cellX;
+    
+    var maxTries = (partition.length / 4);
+    var tries = 0;
+    
+    while (true) {
+        // Choose one random free cell in this partition.
+        do {
+            tries++;
+            if (tries > maxTries) {
+                return 0;
+            }
+            
+            pIndex = (Math.random() * partition.length) | 0;
+            a = partition[pIndex];
+        } while (this.occupied[a] === 1);
+
+        var sx = a % lenX;
+        var sy = (a / lenX) | 0;
+
+        // Check if xCells-1 cells are free after it.
+        for (i = 1; i < nCells; i++) {
+            cellX = (sx + i) % lenX;
+            cell = sy * lenX + cellX;
+            if (this.occupied[cell] === 1) {
+                break;
+            }
+        }
+        
+        // If all the cells are unfilled, fill them and return the number.
+        if (i === nCells) {
+            for (i = 0; i < nCells; i++) {
+                cellX = (sx + i) % lenX;
+                cell = sy * lenX + cellX;
+                this.occupied[cell] = 1;
+            }
+            this.nUnusedCells -= nCells;
+            
+            var thing = {
+                type: 'text',
+                sx: a % lenX,
+                sy: (a / lenX) | 0,
+                nCells: nCells,
+                text: text
+            };
+
+            this.onNew(thing);
+            
+            return nCells;
+        }
+    }
 };
 
 Board.prototype.eliminateUsedCells = function (startCell, directions) {
@@ -329,6 +387,21 @@ Board.prototype.getOccupiedString = function () {
         ret += this.occupied[i];
         if (i % this.lenX === this.lenX - 1) {
             ret += '\n';
+        }
+    }
+    
+    return ret;
+};
+
+Board.prototype.getRandomText = function () {
+    var ret = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+    var len = 2 + ((Math.random() * 4) | 0);
+    
+    for (var i = 1; i < len; i++) {
+        if (Math.random() > 0.5) {
+            ret += String.fromCharCode(65 + ((Math.random() * 26) | 0));
+        } else {
+            ret += String.fromCharCode(48 + ((Math.random() * 10) | 0));
         }
     }
     

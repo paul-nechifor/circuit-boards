@@ -8,6 +8,7 @@
     <script src='js/Line.js'></script>
     <script src='js/SmallHole.js'></script>
     <script src='js/Square.js'></script>
+    <script src='js/Text.js'></script>
     <script src='js/aStar.js'></script>
 </head>
 <body>
@@ -35,22 +36,25 @@
             connectionTypePool.addChoice(5, new Square());
             
             var typePool = new ChoicePool();
-            typePool.addChoice(20, 'connection');
-            typePool.addChoice(2, 'text');
+            typePool.addChoice(15, 'connection');
+            typePool.addChoice(1, 'text');
 
             return {
                 canvas: document.getElementById("tile"),
                 connectionTypePool: connectionTypePool,
                 typePool: typePool,
                 size: 64,
-                abandonPartitionSize: 4,
+                abandonPartitionSize: 100,
                 partitionParamFunc: partitionParamFunc,
                 cellSize: 8,
                 backgroundColor: "#112211",
                 circuitPrimaryColor: "#116611",
                 circuitSecondaryColor: "#666611",
                 squareRelativeSize: 0.7,
-                circuitPrimaryLineWidth: 0.26
+                circuitPrimaryLineWidth: 0.26,
+                fontColor: "#666611",
+                fontFamily: 'monospace',
+                fontRelativeSize: 1.2
             };
         }
 
