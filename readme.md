@@ -3,6 +3,8 @@
 A Node package for generating seamless tiles that resemble circuit boards. You
 can [play with the settings][1] on my web site or just clone this.
 
+![circuit boards screenshot](screenshot.png)
+
 I'll be using this in a game I'm developing.
 
 ## Examples
