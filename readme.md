@@ -5,18 +5,20 @@ can [play with the settings][1] on my web site or just clone this.
 
 I'll be using this in a game I'm developing.
 
-## Example
+## Examples
+
+A basic example:
 
 ```coffeescript
 Canvas = require 'canvas'
-{draw} = require '../lib'
+{draw} = require 'circuit-boards'
 fs = require 'fs'
 
 canvas = new Canvas
 opts =
   size: 128
 stopDraw = draw canvas, opts, ->
-  out = fs.createWriteStream(__dirname + '/text.png')
+  out = fs.createWriteStream __dirname + '/text.png'
   stream = canvas.pngStream()
   stream.on 'data', (chunk) -> out.write chunk
   stream.on 'end', -> console.log 'saved'
@@ -24,6 +26,10 @@ stopDraw = draw canvas, opts, ->
 # Stop early. The draw callback isn't called.
 #setTimeout (-> stopDraw ->), 1000
 ```
+
+Generate an image for all the styles:
+
+    coffee examples/doAll.coffee
 
 ## License
 
