@@ -1,0 +1,24 @@
+{
+  "name": "circuit-boards",
+  "version": "0.0.0",
+  "description": "Generate seamless tiles that resemble circuit boards.",
+  "author": "Paul Nechifor <paul@nechifor.net> (http://nechifor.net/)",
+  "main": "./lib",
+  "scripts": {
+    "preinstall": "rm -fr lib; mkdir lib; cp src/*.js lib; coffee --compile --bare --output lib src"
+  },
+  "keywords": [
+    "circuits",
+    "circuit board",
+    "tile",
+    "seamless"
+  ],
+  "dependencies": {
+    "canvas": "^1.1.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paul-nechifor/circuit-boards"
+  },
+  "license": "MIT"
+}

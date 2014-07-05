@@ -13,13 +13,15 @@ ChoicePool.prototype.addChoice = function (weight, choice) {
 ChoicePool.prototype.pick = function () {
     var r = Math.floor(Math.random() * this.sum) + 1;
     var runningSum = 0;
-    
+
     for (var i = 0, len = this.weights.length; i < len; i++) {
         runningSum += this.weights[i];
         if (runningSum >= r) {
             return this.choices[i];
         }
     }
-    
+
     return null; // Impossible.
 };
+
+module.exports = ChoicePool;

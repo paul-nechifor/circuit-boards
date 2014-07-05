@@ -7,3 +7,5 @@ function Element(type, x, y) {
 Element.prototype.draw = function (ctx, values) {
     this.type.draw(ctx, values, this.x, this.y);
 };
+
+module.exports = Element;
