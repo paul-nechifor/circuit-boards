@@ -1,6 +1,6 @@
 {
   "name": "circuit-boards",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Generate seamless tiles that resemble circuit boards.",
   "author": "Paul Nechifor <paul@nechifor.net> (http://nechifor.net/)",
   "main": "./lib",
