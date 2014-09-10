@@ -1,7 +1,7 @@
 # Circuit Boards
 
 A Node package for generating seamless tiles that resemble circuit boards. You
-can [play with the settings][1] on my web site or just clone this.
+can [play with the settings][site] on my web site or just clone this.
 
 ![circuit boards screenshot](screenshot.png)
 
@@ -37,4 +37,4 @@ Generate an image for all the styles:
 
 MIT
 
-[1]: http://old.nechifor.net/circuits
+[site]: http://nechifor.net/circuits
