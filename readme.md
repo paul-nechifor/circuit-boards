@@ -1,3 +1,7 @@
+# This repository has been moved to [gitlab.com/paul-nechifor/circuit-boards](http://gitlab.com/paul-nechifor/circuit-boards).
+
+Old readme:
+
 # Circuit Boards
 
 A Node package for generating seamless tiles that resemble circuit boards. You
